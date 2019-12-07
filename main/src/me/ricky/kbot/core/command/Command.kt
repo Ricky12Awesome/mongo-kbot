@@ -2,14 +2,44 @@ package me.ricky.kbot.core.command
 
 import kotlinx.serialization.Serializable
 import me.ricky.kbot.core.util.JavaCordHandler
+import org.javacord.api.entity.permission.PermissionType
 import org.javacord.api.event.message.MessageCreateEvent
+
+/**
+ * @param prefix Prefix for [CommandArgument]
+ * @param suffix Suffix for [CommandArgument]
+ */
+@Serializable
+enum class CommandArgumentType(
+  val prefix: String,
+  val suffix: String
+) {
+  OPTIONAL("[", "]"), REQUIRED("<", ">")
+}
+
+/**
+ * @param type Type of the argument
+ * @param name Name of the argument
+ */
+@Serializable
+data class CommandArgument(
+  val type: CommandArgumentType,
+  val name: String
+) {
+  inline val value get() = "${type.prefix}$name${type.suffix}"
+}
 
 /**
  * @param name Name of the command, used as the command key for [CommandHandler]
  */
 @Serializable
 data class CommandInfo(
-  val name: String
+  val name: String,
+  val description: String,
+  val aliases: Set<String> = setOf(),
+  val arguments: List<CommandArgument> = listOf(),
+  val botPermissions: Set<PermissionType> = setOf(),
+  val userPermissions: Set<PermissionType> = setOf()
 )
 
 /**
