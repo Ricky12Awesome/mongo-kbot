@@ -1,4 +1,4 @@
-val ktorVersion = "1.2.4"
+val ktorVersion = "1.2.6"
 
 plugins {
   kotlin("jvm") version "1.3.61"
@@ -24,7 +24,9 @@ dependencies {
   implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
   implementation("io.ktor:ktor-client-cio:$ktorVersion")
   implementation("io.ktor:ktor-client-json-jvm:$ktorVersion")
-  implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
+  implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion") {
+    isTransitive = false
+  }
   implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
 }
 

@@ -12,3 +12,7 @@
 * Added Command Arguments, description, permissions to CommandInfo
 * Added the start of a command dsl
 * Added the start of mongo handler and documents
+
+#### 0.0.3
+* Tweaked Dependencies
+* Edited README.md
