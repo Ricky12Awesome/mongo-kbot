@@ -1,0 +1,5 @@
+**/build/
+**/out/
+.gradle/
+main/run
+test/run
