@@ -1,29 +1,23 @@
 package me.ricky.kbot.test
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.future.asDeferred
+import me.ricky.kbot.core.KBot
 import me.ricky.kbot.core.command.*
 import me.ricky.kbot.core.data.RuntimePrefixHandler
 import me.ricky.kbot.core.util.register
-import org.javacord.api.DiscordApi
-import org.javacord.api.DiscordApiBuilder
 
 suspend fun main() {
-  val bot = KBot(System.getenv("token"))
-  val api = bot.startAsync().await()
+  val bot = TestBot()
+  val api = bot.loginAsync().await()
 
   println(api)
 }
 
-class KBot(token: String) {
-  val builder: DiscordApiBuilder = DiscordApiBuilder().setToken(token)
+class TestBot : KBot() {
   val prefixHandler = RuntimePrefixHandler(">")
   val commandHandler = MultiCommandHandler()
 
-  fun startAsync(): Deferred<DiscordApi> {
+  override suspend fun initialize() {
     registerCommands()
-
-    return builder.login().asDeferred()
   }
 
   fun registerCommands() {

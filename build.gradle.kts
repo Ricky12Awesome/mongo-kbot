@@ -12,9 +12,6 @@ repositories {
 
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
-  implementation(kotlin("script-runtime"))
-  implementation(kotlin("script-util"))
-  implementation(kotlin("compiler-embeddable"))
   implementation("org.litote.kmongo:kmongo:3.11.1")
   implementation("org.mongodb:mongodb-driver-async:3.11.2")
   implementation("org.javacord:javacord:3.0.4")
