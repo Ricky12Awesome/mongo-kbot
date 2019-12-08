@@ -16,3 +16,8 @@
 #### 0.0.3
 * Tweaked Dependencies
 * Edited README.md
+
+#### 0.0.4
+* Implemented a bit of mongo handler
+* Changed a few things with ServerDocument
+* Added MemberDocument (used with ServerDocument)

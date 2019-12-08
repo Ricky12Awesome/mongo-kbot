@@ -55,7 +55,7 @@ abstract class AbstractCommandHandler<C : CommandContext>(
 
     val args = content.removePrefix(prefix).split(" ")
     val command = _commands[args[0]] ?: return
-    val context = event.getContext(args) ?: return
+    val context = event.getContext(args.drop(1)) ?: return
 
     GlobalScope.launch {
       command.execute(context)

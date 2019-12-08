@@ -2,15 +2,12 @@ package me.ricky.kbot.test
 
 import me.ricky.kbot.core.KBot
 import me.ricky.kbot.core.command.*
-import me.ricky.kbot.core.data.MongoDBHandler
-import me.ricky.kbot.core.data.RuntimePrefixHandler
-import me.ricky.kbot.core.data.model.ServerDocument
-import me.ricky.kbot.core.util.jsonx
+import me.ricky.kbot.core.data.MongoHandler
+import me.ricky.kbot.core.data.MongoPrefixHandler
+import me.ricky.kbot.core.data.PrefixHandler
 import me.ricky.kbot.core.util.register
 import org.javacord.api.entity.permission.PermissionType
-import org.litote.kmongo.findOneById
-import org.litote.kmongo.getCollectionOfName
-import org.litote.kmongo.replaceOneById
+import kotlin.properties.Delegates
 
 suspend fun main() {
   val bot = TestBot()
@@ -20,23 +17,27 @@ suspend fun main() {
 }
 
 class TestBot : KBot() {
-  val prefixHandler = RuntimePrefixHandler(">")
+  val mongoHandler = MongoHandler(config.mongodb)
+  val prefixHandler = MongoPrefixHandler(mongoHandler, ">")
   val commandHandler = MultiCommandHandler()
-  // val mongoHandler = MongoDBHandler(config.mongodb)
 
   override suspend fun initialize() {
+    registerCommandHandlers()
     registerCommands()
   }
 
-  fun registerCommands() {
+  fun registerCommandHandlers() {
     commandHandler.register(ServerCommandHandler(prefixHandler))
-    commandHandler.register(TestCommand())
 
     builder.register(commandHandler)
   }
+
+  fun registerCommands() {
+    commandHandler.register(TestCommand(prefixHandler))
+  }
 }
 
-class TestCommand : Command<ServerCommandContext> {
+class TestCommand(private val prefixHandler: PrefixHandler) : Command<ServerCommandContext> {
   override val info: CommandInfo = CommandInfo(
     botPermissions = setOf(PermissionType.ADMINISTRATOR),
     userPermissions = setOf(PermissionType.ADMINISTRATOR),
@@ -50,11 +51,19 @@ class TestCommand : Command<ServerCommandContext> {
   )
 
   override suspend fun execute(context: ServerCommandContext) {
-    context.channel.sendMessage(
-      buildString {
-        appendln("```json")
-        appendln(jsonx.stringify(CommandInfo.serializer(), info))
-        appendln("```")
-      })
+    // TODO Add `context.argument(::requireX)` or `context.argument.requireString([index])`
+    val newPrefix = context.args.getOrNull(0) ?: return
+
+    prefixHandler.setPrefix(context.server, newPrefix)
+
+    context.channel.sendMessage("New prefix: `$newPrefix`")
+
+//    context.channel.sendMessage(
+//      buildString {
+//        appendln("```json")
+//        appendln(jsonx.stringify(CommandInfo.serializer(), info))
+//        appendln("```")
+//      }
+//    )
   }
 }
