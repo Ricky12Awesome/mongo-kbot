@@ -58,12 +58,17 @@ abstract class AbstractCommandHandler<C : CommandContext>(
     val context = event.getContext(args.drop(1)) ?: return
 
     GlobalScope.launch {
-      command.execute(context)
-    }.invokeOnCompletion { throwable ->
-      throwable ?: return@invokeOnCompletion
-
-      throwable.printStackTrace()
-      event.channel.sendMessage("An exception has occurred, ${throwable.message}")
+      try {
+        command.execute(context)
+      } catch (throwable: Throwable) {
+        when (throwable) {
+          is CommandException -> context.channel.sendMessage(throwable.message)
+          else -> {
+            throwable.printStackTrace()
+            context.channel.sendMessage("An unknown error has occurred. ${throwable.message}")
+          }
+        }
+      }
     }
   }
 

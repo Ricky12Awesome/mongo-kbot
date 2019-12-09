@@ -51,7 +51,10 @@ data class CommandInfo(
 open class CommandContext(
   val args: List<String>,
   event: MessageCreateEvent
-) : MessageCreateEvent by event
+) : MessageCreateEvent by event {
+  open val exceptions: CommandExceptionHandler by lazy { CommandExceptionHandler(this) }
+  open val arguments: CommandArgumentsHandler by lazy { CommandArgumentsHandler(this) }
+}
 
 /**
  * @property info Gets information about the command

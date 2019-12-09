@@ -16,7 +16,7 @@ import org.javacord.api.event.message.MessageCreateEvent
  * @param args Arguments for the command
  * @param event [MessageCreateEvent] to delegate from
  */
-class ServerCommandContext(
+open class ServerCommandContext(
   val server: Server,
   val author: User,
   val channel: ServerTextChannel,

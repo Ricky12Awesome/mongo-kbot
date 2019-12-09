@@ -21,3 +21,7 @@
 * Implemented a bit of mongo handler
 * Changed a few things with ServerDocument
 * Added MemberDocument (used with ServerDocument)
+
+#### 0.0.5
+* Added CommandException and CommandExceptionHandler
+* Added Command Arguments that I mostly copy and pasted from my old bot

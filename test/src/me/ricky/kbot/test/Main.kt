@@ -7,7 +7,6 @@ import me.ricky.kbot.core.data.MongoPrefixHandler
 import me.ricky.kbot.core.data.PrefixHandler
 import me.ricky.kbot.core.util.register
 import org.javacord.api.entity.permission.PermissionType
-import kotlin.properties.Delegates
 
 suspend fun main() {
   val bot = TestBot()
@@ -46,24 +45,17 @@ class TestCommand(private val prefixHandler: PrefixHandler) : Command<ServerComm
     aliases = setOf("t"),
     arguments = listOf(
       required("name"),
-      optional("user")
+      optional("int")
     )
   )
 
   override suspend fun execute(context: ServerCommandContext) {
-    // TODO Add `context.argument(::requireX)` or `context.argument.requireString([index])`
-    val newPrefix = context.args.getOrNull(0) ?: return
+    with(context) {
+      val name = argument(::requireString)
+      val int = argument(::requireInt)
+      val long = argument(::requireLong)
 
-    prefixHandler.setPrefix(context.server, newPrefix)
-
-    context.channel.sendMessage("New prefix: `$newPrefix`")
-
-//    context.channel.sendMessage(
-//      buildString {
-//        appendln("```json")
-//        appendln(jsonx.stringify(CommandInfo.serializer(), info))
-//        appendln("```")
-//      }
-//    )
+      channel.sendMessage("$name $int $long")
+    }
   }
 }
