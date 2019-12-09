@@ -25,3 +25,6 @@
 #### 0.0.5
 * Added CommandException and CommandExceptionHandler
 * Added Command Arguments that I mostly copy and pasted from my old bot
+
+#### 0.0.6
+* Added a lot of Command Argument stuff

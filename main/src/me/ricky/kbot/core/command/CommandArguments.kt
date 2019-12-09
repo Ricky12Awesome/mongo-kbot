@@ -13,9 +13,13 @@ import org.javacord.api.entity.user.User
 typealias ArgumentTransformer<T> = (index: Int) -> T
 typealias ContinuesArgumentTransformer<T> = ArgumentTransformer<ContinuesArgument<T>>
 
-open class CommandArgumentsHandler(context: CommandContext) {
+open class CommandArgumentsHandler(open val context: CommandContext) {
   var argPos: Int = 0
 }
+
+open class ServerCommandArgumentsHandler(
+  override val context: ServerCommandContext
+) : CommandArgumentsHandler(context)
 
 /**
  * @param value the return value of the argument
@@ -24,12 +28,48 @@ open class CommandArgumentsHandler(context: CommandContext) {
 data class ContinuesArgument<T>(val value: T, val endIndex: Int)
 
 /**
+ * Shorthand for context.argument(context::requireString)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireString(): String {
+  return context.argument(context::requireString)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireString)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalString(default: String): String {
+  return context.optionalArgument(default, context::requireString)
+}
+
+/**
  * @param index the index of the argument
  *
  * @return a [String] of the argument at [index]
  */
 fun CommandContext.requireString(index: Int): String {
   return args[index]
+}
+
+/**
+ * Shorthand for context.argument(context::requireInt)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireInt(): Int {
+  return context.argument(context::requireInt)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireInt)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalInt(default: Int): Int {
+  return context.optionalArgument(default, context::requireInt)
 }
 
 /**
@@ -46,6 +86,24 @@ fun CommandContext.requireInt(index: Int): Int {
 }
 
 /**
+ * Shorthand for context.argument(context::requireLong)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireLong(): Long {
+  return context.argument(context::requireLong)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireLong)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalLong(default: Long): Long {
+  return context.optionalArgument(default, context::requireLong)
+}
+
+/**
  * @param index the index of the argument
  *
  * @return a [Long] of the argument at [index]
@@ -56,6 +114,24 @@ fun CommandContext.requireLong(index: Int): Long {
   val value = args[index]
 
   return value.toLongOrNull() ?: throw exceptions.parseException(value, "Long")
+}
+
+/**
+ * Shorthand for context.argument(context::requireFloat)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireFloat(): Float {
+  return context.argument(context::requireFloat)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireFloat)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalFloat(default: Float): Float {
+  return context.optionalArgument(default, context::requireFloat)
 }
 
 /**
@@ -72,6 +148,24 @@ fun CommandContext.requireFloat(index: Int): Float {
 }
 
 /**
+ * Shorthand for context.argument(context::requireDouble)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireDouble(): Double {
+  return context.argument(context::requireDouble)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireDouble)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalDouble(default: Double): Double {
+  return context.optionalArgument(default, context::requireDouble)
+}
+
+/**
  * @param index the index of the argument
  *
  * @return a [Double] of the argument at [index]
@@ -82,6 +176,24 @@ fun CommandContext.requireDouble(index: Int): Double {
   val value = args[index]
 
   return value.toDoubleOrNull() ?: throw exceptions.parseException(value, "Double")
+}
+
+/**
+ * Shorthand for context.argument(context::requireBoolean)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireBoolean(): Boolean {
+  return context.argument(context::requireBoolean)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireBoolean)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalBoolean(default: Boolean): Boolean {
+  return context.optionalArgument(default, context::requireBoolean)
 }
 
 /**
@@ -102,12 +214,48 @@ fun CommandContext.requireBoolean(index: Int): Boolean {
 }
 
 /**
+ * Shorthand for context.argument(context::requireSafeBoolean)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireSafeBoolean(): Boolean {
+  return context.argument(context::requireSafeBoolean)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireSafeBoolean)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalSafeBoolean(default: Boolean): Boolean {
+  return context.optionalArgument(default, context::requireSafeBoolean)
+}
+
+/**
  * @param index the index of the argument
  *
  * @return a [Boolean] of the argument at [index], false if value is not a boolean/
  */
 fun CommandContext.requireSafeBoolean(index: Int): Boolean {
   return args[index].toBoolean()
+}
+
+/**
+ * Shorthand for context.argument(context::requireQuatedText)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireQuotedText(): String {
+  return context.argument(context::requireQuotedText)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireQuotedText)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalQuotedText(default: String): String {
+  return context.optionalArgument(default, context::requireQuotedText)
 }
 
 /**
@@ -141,15 +289,51 @@ fun CommandContext.requireQuotedText(index: Int): ContinuesArgument<String> {
 }
 
 /**
+ * Shorthand for context.argument(context::requireText)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireText(): String {
+  return context.argument(context::requireText)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireText)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalText(default: String): String {
+  return context.optionalArgument(default, context::requireText)
+}
+
+/**
  * @param index the index of the argument
  *
  * @return a [String] of the argument starting at [index]
  */
-fun CommandContext.requireMessage(index: Int): ContinuesArgument<String> {
+fun CommandContext.requireText(index: Int): ContinuesArgument<String> {
   return ContinuesArgument(
     value = args.subList(index, args.size).joinToString(" "),
     endIndex = args.lastIndex
   )
+}
+
+/**
+ * Shorthand for context.argument(context::requireList)
+ *
+ * @see CommandContext.argument
+ */
+fun CommandArgumentsHandler.requireList(): List<String> {
+  return context.argument(context::requireList)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireList)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun CommandArgumentsHandler.optionalList(default: List<String>): List<String> {
+  return context.optionalArgument(default, context::requireList)
 }
 
 /**
@@ -162,6 +346,24 @@ fun CommandContext.requireList(index: Int): ContinuesArgument<List<String>> {
     value = args.subList(index, args.size),
     endIndex = args.lastIndex
   )
+}
+
+/**
+ * Shorthand for context.argument(context::requireTextChannel)
+ *
+ * @see CommandContext.argument
+ */
+fun ServerCommandArgumentsHandler.requireTextChannel(): ServerTextChannel {
+  return context.argument(context::requireTextChannel)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireTextChannel)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun ServerCommandArgumentsHandler.optionalTextChannel(default: ServerTextChannel): ServerTextChannel {
+  return context.optionalArgument(default, context::requireTextChannel)
 }
 
 /**
@@ -191,6 +393,24 @@ fun ServerCommandContext.requireTextChannel(index: Int): ServerTextChannel {
   channel ?: throw exceptions.parseException(value, "ServerTextChannel")
 
   return channel
+}
+
+/**
+ * Shorthand for context.argument(context::requireVoiceChannel)
+ *
+ * @see CommandContext.argument
+ */
+fun ServerCommandArgumentsHandler.requireVoiceChannel(): ServerVoiceChannel {
+  return context.argument(context::requireVoiceChannel)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireVoiceChannel)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun ServerCommandArgumentsHandler.optionalVoiceChannel(default: ServerVoiceChannel): ServerVoiceChannel {
+  return context.optionalArgument(default, context::requireVoiceChannel)
 }
 
 /**
@@ -231,6 +451,24 @@ fun ServerCommandContext.requireVoiceChannel(index: Int): ContinuesArgument<Serv
 }
 
 /**
+ * Shorthand for context.argument(context::requireUser)
+ *
+ * @see CommandContext.argument
+ */
+fun ServerCommandArgumentsHandler.requireUser(): User {
+  return context.argument(context::requireUser)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireUser)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun ServerCommandArgumentsHandler.optionalUser(default: User): User {
+  return context.optionalArgument(default, context::requireUser)
+}
+
+/**
  * @param index the index of the argument
  *
  * @return an [User] of the argument starting at [index]
@@ -264,6 +502,24 @@ fun ServerCommandContext.requireUser(index: Int): ContinuesArgument<User> {
   user ?: throw exceptions.parseException(list.joinToString(" "), "User")
 
   return ContinuesArgument(user, endIndex)
+}
+
+/**
+ * Shorthand for context.argument(context::requireRole)
+ *
+ * @see CommandContext.argument
+ */
+fun ServerCommandArgumentsHandler.requireRole(): Role {
+  return context.argument(context::requireRole)
+}
+
+/**
+ * Shorthand for context.optionalArgument([default], context::requireRole)
+ *
+ * @see CommandContext.optionalArgument
+ */
+fun ServerCommandArgumentsHandler.optionalRole(default: Role): Role {
+  return context.optionalArgument(default, context::requireRole)
 }
 
 /**
@@ -309,7 +565,7 @@ fun ServerCommandContext.requireRole(index: Int): ContinuesArgument<Role> {
  * @throws CommandExceptionHandler.checkNotEnoughArguments if there is not enough arguments
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
-inline fun <T> CommandContext.argument(
+inline fun <C : CommandContext, T> C.argument(
   transform: ArgumentTransformer<T>,
   throwTooManyArgs: Boolean = false
 ): T {
@@ -326,7 +582,7 @@ inline fun <T> CommandContext.argument(
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
 @JvmName("continuesArgument")
-inline fun <T> CommandContext.argument(
+inline fun <C :CommandContext, T> C.argument(
   transform: ContinuesArgumentTransformer<T>,
   throwTooManyArgs: Boolean = false
 ): T {
@@ -346,7 +602,7 @@ inline fun <T> CommandContext.argument(
  *
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
-inline fun <T> CommandContext.optionalArgument(
+inline fun <C : CommandContext, T> C.optionalArgument(
   default: T,
   transform: ArgumentTransformer<T>,
   throwTooManyArgs: Boolean = false
@@ -364,7 +620,7 @@ inline fun <T> CommandContext.optionalArgument(
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
 @JvmName("optionalContinuesArgument")
-inline fun <T> CommandContext.optionalArgument(
+inline fun <C : CommandContext, T> C.optionalArgument(
   default: T,
   transform: ContinuesArgumentTransformer<T>,
   throwTooManyArgs: Boolean = false
@@ -386,7 +642,7 @@ inline fun <T> CommandContext.optionalArgument(
  * @throws CommandExceptionHandler.checkNotEnoughArguments if there is not enough arguments
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
-inline fun <T> CommandContext.argument(
+inline fun <C : CommandContext, T> C.argument(
   index: Int,
   transform: ArgumentTransformer<T>,
   throwTooManyArgs: Boolean = false
@@ -410,7 +666,7 @@ inline fun <T> CommandContext.argument(
  * @throws CommandExceptionHandler.checkNotEnoughArguments if there is not enough arguments
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
-inline fun <T> CommandContext.argument(
+inline fun <C : CommandContext, T> C.argument(
   index: Int,
   transform: ContinuesArgumentTransformer<T>,
   throwTooManyArgs: Boolean = false
@@ -436,7 +692,7 @@ inline fun <T> CommandContext.argument(
  *
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
-inline fun <T> CommandContext.optionalArgument(
+inline fun <C : CommandContext, T> C.optionalArgument(
   index: Int,
   default: T,
   transform: ArgumentTransformer<T>,
@@ -457,7 +713,7 @@ inline fun <T> CommandContext.optionalArgument(
  *
  * @throws CommandExceptionHandler.checkTooManyArguments if [throwTooManyArgs] is true, will throw if there is too many arguments
  */
-inline fun <T> CommandContext.optionalArgument(
+inline fun <C : CommandContext, T> C.optionalArgument(
   index: Int,
   default: T,
   transform: ContinuesArgumentTransformer<T>,

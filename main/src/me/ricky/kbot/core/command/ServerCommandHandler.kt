@@ -22,7 +22,9 @@ open class ServerCommandContext(
   val channel: ServerTextChannel,
   args: List<String>,
   event: MessageCreateEvent
-) : CommandContext(args, event)
+) : CommandContext(args, event) {
+  override val arguments: ServerCommandArgumentsHandler by lazy { ServerCommandArgumentsHandler(this) }
+}
 
 /**
  * Handles Commands for servers, Commands must use [ServerCommandContext]

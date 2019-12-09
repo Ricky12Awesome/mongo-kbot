@@ -51,9 +51,9 @@ class TestCommand(private val prefixHandler: PrefixHandler) : Command<ServerComm
 
   override suspend fun execute(context: ServerCommandContext) {
     with(context) {
-      val name = argument(::requireString)
-      val int = argument(::requireInt)
-      val long = argument(::requireLong)
+      val name = arguments.requireString()
+      val int =  arguments.requireInt()
+      val long = arguments.requireLong()
 
       channel.sendMessage("$name $int $long")
     }
