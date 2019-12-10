@@ -43,6 +43,15 @@ data class CommandInfo(
 )
 
 /**
+ * Handles positions for command arguments
+ *
+ * @param context [CommandContext] to be used for arguments
+ */
+open class CommandArgumentsHandler(open val context: CommandContext) {
+  var argPos: Int = 0
+}
+
+/**
  * Context for [Command]
  *
  * @param args Arguments for the command
@@ -54,6 +63,7 @@ open class CommandContext(
 ) : MessageCreateEvent by event {
   open val exceptions: CommandExceptionHandler by lazy { CommandExceptionHandler(this) }
   open val arguments: CommandArgumentsHandler by lazy { CommandArgumentsHandler(this) }
+
 }
 
 /**

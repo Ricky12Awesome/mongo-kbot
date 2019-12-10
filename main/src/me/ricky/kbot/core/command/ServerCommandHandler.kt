@@ -8,6 +8,15 @@ import org.javacord.api.entity.user.User
 import org.javacord.api.event.message.MessageCreateEvent
 
 /**
+ * Handles positions for command arguments
+ *
+ * @param context [ServerCommandContext] to be used for arguments
+ */
+open class ServerCommandArgumentsHandler(
+  override val context: ServerCommandContext
+) : CommandArgumentsHandler(context)
+
+/**
  * Command Context for [ServerCommandContext]
  *
  * @param server [Server] where the command was executed from

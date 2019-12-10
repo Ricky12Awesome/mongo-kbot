@@ -28,3 +28,7 @@
 
 #### 0.0.6
 * Added a lot of Command Argument stuff
+
+#### 0.0.7
+* Moved Server stuff from CommandArguments.kt to ServerCommandArguments.kt
+* MultiCommandHandler#commands now gets commands 

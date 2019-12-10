@@ -13,7 +13,7 @@ class MultiCommandHandler : CommandHandler<CommandContext> {
   private val _handlers = mutableMapOf<KClass<*>, AbstractCommandHandler<CommandContext>>()
   val handlers: Map<KClass<*>, AbstractCommandHandler<CommandContext>> = _handlers
 
-  override val commands: Map<String, Command<CommandContext>> = _handlers.values
+  override val commands: Map<String, Command<CommandContext>> get() = _handlers.values
     .fold(mapOf()) { map, handler -> map + handler.commands }
 
   /**
@@ -70,10 +70,6 @@ class MultiCommandHandler : CommandHandler<CommandContext> {
   @Suppress("UNCHECKED_CAST")
   fun <C : CommandContext> registerHandler(kClass: KClass<C>, handler: AbstractCommandHandler<C>) {
     handler as AbstractCommandHandler<CommandContext>
-
-    if (_handlers.values.contains(handler)) {
-      error("$handler is already registered.")
-    }
 
     _handlers[kClass] = handler
   }
