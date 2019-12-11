@@ -31,4 +31,8 @@
 
 #### 0.0.7
 * Moved Server stuff from CommandArguments.kt to ServerCommandArguments.kt
-* MultiCommandHandler#commands now gets commands 
+* MultiCommandHandler#commands now gets commands
+
+#### 0.0.8
+* Added Sources Jar and Javadoc Jar, now it can be used as a library
+(Still new to kind of thing)
