@@ -16,7 +16,8 @@ dependencies {
   testCompileOnly("ch.qos.logback:logback-classic:1.2.1")
   compile("org.litote.kmongo:kmongo:3.11.1")
   compile("org.mongodb:mongodb-driver-async:3.11.2")
-  compile("org.javacord:javacord:3.0.4")
+  compile("org.javacord:javacord-api:3.0.5")
+  compile("org.javacord:javacord-core:3.0.5")
   compile("com.google.guava:guava:28.1-jre")
   compile("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0")
   compile("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.2")
@@ -61,15 +62,6 @@ publishing {
 }
 
 tasks {
-  jar {
-
-    manifest {
-      attributes(
-        "Class-Path" to configurations.compile.get().joinToString(" ") { it.name }
-      )
-    }
-  }
-
   compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
   }
