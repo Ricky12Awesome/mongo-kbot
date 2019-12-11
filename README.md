@@ -11,7 +11,10 @@ repositories {
   maven("https://jitpack.io")
 }
 
-compile("com.github.Ricky12Awesome:mongo-kbot:0.0.8")
+
+dependencies {
+  compile("com.github.Ricky12Awesome:mongo-kbot:0.0.9")
+}
 ```
 
 # Usage

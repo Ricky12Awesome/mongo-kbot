@@ -36,3 +36,7 @@
 #### 0.0.8
 * Added Sources Jar and Javadoc Jar, now it can be used as a library
 (Still new to kind of thing)
+
+#### 0.0.9
+* Fixed issue where 0.0.8 wouldn't run if you did not have javacord-core depend
+* Added `KBot#register(JavaCordHandler)`
