@@ -6,13 +6,12 @@ This is designed as a library so it can be by other people.
 # Setup
 `gradle.build.kts`
 ```kotlin
-TODO("""
-  Gradle Setup, this is not complete yet, I still needed to setup srouces,
-  but eventually this will be available.
-""")
-maven("jitpack url")
+repositories {
+  maven("https://kotlin.bintray.com/kotlinx")
+  maven("https://jitpack.io")
+}
 
-compile("this git repo")
+compile("com.github.Ricky12Awesome:mongo-kbot:0.0.8")
 ```
 
 # Usage
