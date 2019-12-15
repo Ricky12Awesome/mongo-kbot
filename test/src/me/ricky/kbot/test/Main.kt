@@ -21,14 +21,20 @@ class TestBot : KBot() {
   val commandHandler = MultiCommandHandler()
 
   override suspend fun initialize() {
-    registerCommandHandlers()
+    registerHandlers()
     registerCommands()
+  }
+
+  fun registerHandlers() {
+    registerCommandHandlers()
+
+    register(prefixHandler)
   }
 
   fun registerCommandHandlers() {
     commandHandler.register(ServerCommandHandler(prefixHandler))
 
-    builder.register(commandHandler)
+    register(commandHandler)
   }
 
   fun registerCommands() {
@@ -37,25 +43,42 @@ class TestBot : KBot() {
 }
 
 class TestCommand(private val prefixHandler: PrefixHandler) : Command<ServerCommandContext> {
-  override val info: CommandInfo = CommandInfo(
-    botPermissions = setOf(PermissionType.ADMINISTRATOR),
-    userPermissions = setOf(PermissionType.ADMINISTRATOR),
-    name = "test",
-    description = "Testing Command",
-    aliases = setOf("t"),
-    arguments = listOf(
-      required("name"),
-      optional("int")
-    )
-  )
+  override val info: CommandInfo = info("test") {
+    description = "123"
+    aliases = setOf("a", "b", "c")
+    botPermissions = setOf(PermissionType.ADMINISTRATOR)
+    userPermissions = setOf(PermissionType.ADMINISTRATOR)
+
+    arguments {
+      require("prefix")
+    }
+  }
 
   override suspend fun execute(context: ServerCommandContext) {
     with(context) {
-      val name = arguments.requireString()
-      val int =  arguments.requireInt()
-      val long = arguments.requireLong()
+      val prefix = arguments.optionalPrefix()
 
-      channel.sendMessage("$name $int $long")
+      if (prefix == null) {
+        channel.sendMessage("Current Prefix: `${prefixHandler.getPrefix(server)}`")
+      } else {
+        prefixHandler.setPrefix(context.server, prefix)
+
+        channel.sendMessage("Prefix changed to `$prefix`")
+      }
     }
+  }
+
+  fun CommandArgumentsHandler.optionalPrefix(): String? {
+    val prefix = context.optionalArgument(null, context::requireString) ?: return null
+
+    if (prefix.contains("`")) {
+      throw CommandException("Prefix must not contain `")
+    }
+
+    if (prefix.length > 4) {
+      throw CommandException("Prefix is too long, must be less than 4.")
+    }
+
+    return prefix
   }
 }

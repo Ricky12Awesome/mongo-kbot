@@ -40,3 +40,9 @@
 #### 0.0.9
 * Fixed issue where 0.0.8 wouldn't run if you did not have javacord-core depend
 * Added `KBot#register(JavaCordHandler)`
+
+#### 0.0.10
+* Aliases and Permissions now work
+* Command Info DSL
+* Added `executeCommand` to `AbstractCommandHandler`
+* Few other tweaks

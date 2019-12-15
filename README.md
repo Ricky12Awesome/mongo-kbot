@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/Ricky12Awesome/mongo-kbot.svg)](https://jitpack.io/#Ricky12Awesome/mongo-kbot)
+
 # mongo-kbot
 Discord Bot that uses JDA and MongoDB in Kotlin
 
@@ -13,7 +15,7 @@ repositories {
 
 
 dependencies {
-  compile("com.github.Ricky12Awesome:mongo-kbot:0.0.9")
+  compile("com.github.Ricky12Awesome:mongo-kbot:0.0.10")
 }
 ```
 

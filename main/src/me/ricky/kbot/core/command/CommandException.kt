@@ -25,3 +25,31 @@ open class CommandExceptionHandler(
     return CommandException("Failed to parse $parsing to $to.")
   }
 }
+
+open class ServerCommandExceptionHandler(
+  private val context: ServerCommandContext
+) : CommandExceptionHandler(context) {
+  open fun checkBotPermissions(info: CommandInfo) {
+    with(context) {
+      val hasPermissions = server
+        .getAllowedPermissions(api.yourself)
+        .containsAll(info.botPermissions)
+
+      if (!hasPermissions) {
+        throw CommandException("${api.yourself.mentionTag} doesn't have permissions.")
+      }
+    }
+  }
+
+  open fun checkUserPermissions(info: CommandInfo) {
+    with(context) {
+      val hasPermissions = server
+        .getAllowedPermissions(author)
+        .containsAll(info.userPermissions)
+
+      if (!hasPermissions) {
+        throw CommandException("${author.mentionTag} doesn't have permissions.")
+      }
+    }
+  }
+}

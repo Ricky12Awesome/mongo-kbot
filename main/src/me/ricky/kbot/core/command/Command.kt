@@ -24,9 +24,9 @@ enum class CommandArgumentType(
 @Serializable
 data class CommandArgument(
   val type: CommandArgumentType,
-  val name: String
+  val names: List<String>
 ) {
-  inline val value get() = "${type.prefix}$name${type.suffix}"
+  inline val value get() = "${type.prefix}${names.joinToString(" | ")}${type.suffix}"
 }
 
 /**
@@ -63,7 +63,6 @@ open class CommandContext(
 ) : MessageCreateEvent by event {
   open val exceptions: CommandExceptionHandler by lazy { CommandExceptionHandler(this) }
   open val arguments: CommandArgumentsHandler by lazy { CommandArgumentsHandler(this) }
-
 }
 
 /**
@@ -80,4 +79,10 @@ interface Command<C : CommandContext> {
  */
 interface CommandHandler<C : CommandContext> : JavaCordHandler {
   val commands: Map<String, Command<C>>
+
+  fun getCommandByNameOrAliases(name: String): Command<C>? {
+    return commands[name] ?: commands.values.firstOrNull {
+      it.info.aliases.contains(name)
+    }
+  }
 }

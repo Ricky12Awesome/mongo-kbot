@@ -15,7 +15,8 @@ data class ServerDocument(
   @SerialName("_id")
   val serverId: Long,
   val prefix: String = ">",
-  val members: Set<MemberDocument> = setOf()
+  val members: Set<MemberDocument> = setOf(),
+  val channels: Set<ServerChannel> = setOf()
 )
 
 /**
@@ -28,4 +29,12 @@ data class MemberDocument(
   @SerialName("_id")
   val memberId: Long,
   val xp: Double = 0.0
+)
+
+/**
+ * @param isBlacklisted If the channel is blacklisted, commands can't execute in this channel.
+ */
+@Serializable
+data class ServerChannel(
+  val isBlacklisted: Boolean = false
 )

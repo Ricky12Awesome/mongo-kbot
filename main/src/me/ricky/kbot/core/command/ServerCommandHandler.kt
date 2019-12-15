@@ -33,6 +33,7 @@ open class ServerCommandContext(
   event: MessageCreateEvent
 ) : CommandContext(args, event) {
   override val arguments: ServerCommandArgumentsHandler by lazy { ServerCommandArgumentsHandler(this) }
+  override val exceptions: ServerCommandExceptionHandler by lazy { ServerCommandExceptionHandler(this) }
 }
 
 /**
@@ -53,6 +54,13 @@ class ServerCommandHandler(
       args = args,
       event = this
     )
+  }
+
+  override suspend fun ServerCommandContext.executeCommand(command: Command<ServerCommandContext>) {
+    exceptions.checkBotPermissions(command.info)
+    exceptions.checkUserPermissions(command.info)
+
+    command.execute(this)
   }
 }
 

@@ -43,6 +43,14 @@ abstract class AbstractCommandHandler<C : CommandContext>(
   abstract fun MessageCreateEvent.getContext(args: List<String>): C?
 
   /**
+   * Executes a [command]
+   *
+   * @param command Command to be executed
+   * @receiver CommandContext to execute the command with
+   */
+  abstract suspend fun C.executeCommand(command: Command<C>)
+
+  /**
    * Handles the execution for commands
    *
    * @param event [MessageCreateEvent] to trigger the event
@@ -54,12 +62,12 @@ abstract class AbstractCommandHandler<C : CommandContext>(
     if (!content.startsWith(prefix)) return
 
     val args = content.removePrefix(prefix).split(" ")
-    val command = _commands[args[0]] ?: return
+    val command = getCommandByNameOrAliases(args[0]) ?: return
     val context = event.getContext(args.drop(1)) ?: return
 
     GlobalScope.launch {
       try {
-        command.execute(context)
+        context.executeCommand(command)
       } catch (throwable: Throwable) {
         when (throwable) {
           is CommandException -> context.channel.sendMessage(throwable.message)

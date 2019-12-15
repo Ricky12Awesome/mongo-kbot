@@ -1,8 +1,14 @@
 package me.ricky.kbot.core.data
 
 import me.ricky.kbot.core.data.model.ServerDocument
+import me.ricky.kbot.core.util.JavaCordHandler
+import me.ricky.kbot.core.util.asNullable
 import me.ricky.kbot.core.util.getOrSet
+import me.ricky.kbot.core.util.register
+import org.javacord.api.DiscordApiBuilder
 import org.javacord.api.entity.server.Server
+import org.javacord.api.event.message.MessageCreateEvent
+import org.javacord.api.listener.message.MessageCreateListener
 import org.litote.kmongo.save
 import org.litote.kmongo.updateOneById
 
@@ -11,7 +17,7 @@ import org.litote.kmongo.updateOneById
  *
  * @property default Default prefix for server
  */
-interface PrefixHandler {
+interface PrefixHandler : MessageCreateListener, JavaCordHandler {
   val default: String
 
   /**
@@ -38,6 +44,20 @@ interface PrefixHandler {
    * @see setPrefix
    */
   fun setPrefix(server: Server, prefix: String) = setPrefix(server.id, prefix)
+
+  override fun onMessageCreate(event: MessageCreateEvent) {
+    with(event) {
+      val server = server.asNullable ?: return
+
+      if (messageContent == api.yourself.nicknameMentionTag) {
+        channel.sendMessage("Prefix: `${getPrefix(server)}`")
+      }
+    }
+  }
+
+  override fun register(api: DiscordApiBuilder) {
+    api.addMessageCreateListener(this)
+  }
 }
 
 /**
